@@ -18,7 +18,7 @@ export default function SoundToggle() {
     <button
       onClick={handleClick}
       aria-label={soundEnabled ? "Silenciar" : "Activar sonido"}
-      className="fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:bg-white/20"
+      className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/10"
     >
       <svg
         width="20"

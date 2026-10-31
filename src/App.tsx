@@ -12,10 +12,14 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Gallery from "./pages/Gallery";
 import Lab from "./pages/Lab";
 import WorkWithMe from "./pages/WorkWithMe";
+import Background from "./components/layout/Background";
+import MusicPlayer from "./components/music/MusicPlayer";
+import { useMusicEngine } from "./hooks/useMusicEngine";
 
 export default function App() {
   const location = useLocation();
   const hasEntered = useAudioStore((s) => s.hasEntered);
+  useMusicEngine();
 
   useEffect(() => {
     if (hasEntered) playSound("transition");
@@ -23,9 +27,10 @@ export default function App() {
 
   return (
     <>
+      <Background />
       <EntryModal />
-      <SoundToggle />
       <Navbar />
+      <MusicPlayer />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />

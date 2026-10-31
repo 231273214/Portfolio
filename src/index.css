@@ -1,19 +1,130 @@
 @import "tailwindcss";
 
-html, body, #root {
+@theme {
+  --font-sans: "Nova Flat", system-ui, sans-serif;
+}
+
+/* ---------- Tema oscuro (por defecto) ---------- */
+:root {
+  --fg: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-hi: rgba(255, 255, 255, 0.4);
+  --glass-drop: rgba(0, 0, 0, 0.25);
+  --noise-opacity: 0.25;
+
+  /* Ruido negro (fondo) y blanco (glass) generados con SVG, sin imágenes */
+  --noise-black: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.5 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --noise-white: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.8 -0.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Tema claro ---------- */
+:root[data-theme="light"] {
+  --fg: #2b1238;
+  --glass-bg: rgba(255, 255, 255, 0.35);
+  --glass-hi: rgba(255, 255, 255, 0.85);
+  --glass-drop: rgba(75, 36, 91, 0.25);
+  --noise-opacity: 0.1;
+}
+
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
 }
 
 body {
-  background: #1a1025;
-  color: white;
-  font-family: system-ui, sans-serif;
+  background: #4b245b;
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+:root[data-theme="light"] body {
+  background: #d2b0e6;
 }
 
 html {
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 html::-webkit-scrollbar {
-  display: none; 
+  display: none;
+}
+
+/* ---------- Fondo ---------- */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  transition: opacity 0.6s ease;
+}
+/* "to bottom left" = más oscuro arriba a la derecha, más claro abajo a la izquierda */
+.bg-dark {
+  background: linear-gradient(
+    to bottom left,
+    #4b245b 0%,
+    rgba(98, 46, 118, 0.9) 46%,
+    rgba(112, 53, 135, 0.9) 75%,
+    #a04bc1 100%
+  );
+}
+.bg-light {
+  opacity: 0;
+  background: linear-gradient(
+    to bottom left,
+    #b98ad6 0%,
+    #d2b0e6 46%,
+    #e6cff2 75%,
+    #f7edfc 100%
+  );
+}
+:root[data-theme="light"] .bg-dark {
+  opacity: 0;
+}
+:root[data-theme="light"] .bg-light {
+  opacity: 1;
+}
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: -9;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  background-image: var(--noise-black);
+  background-size: 200px 200px;
+}
+
+/* ---------- Glass ---------- */
+@layer components {
+  .glass {
+    position: relative; 
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(7.5px);
+    backdrop-filter: blur(7.5px);
+    box-shadow:
+      inset -1px -3px 4px 0 var(--glass-hi),
+      inset 4px 5px 6px 0 var(--glass-hi),
+      0 8px 13px 0 var(--glass-drop);
+  }
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.12;                   
+    background-image: var(--noise-white);
+    background-size: 200px 200px;   
+  }
+  .glass > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ---------- Relieve (pill activo / Work with me) ---------- */
+.relief {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 2px 2px 4px var(--glass-hi),
+    inset -2px -3px 4px rgba(0, 0, 0, 0.18),
+    0 3px 6px var(--glass-drop);
 }
