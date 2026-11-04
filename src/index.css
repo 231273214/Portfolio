@@ -128,3 +128,10 @@ html::-webkit-scrollbar {
     inset -2px -3px 4px rgba(0, 0, 0, 0.18),
     0 3px 6px var(--glass-drop);
 }
+
+.hero-shadow {
+  text-shadow: 0.04em 0.05em 0 rgba(0, 0, 0, 0.9);
+}
+:root[data-theme="light"] .hero-shadow {
+  text-shadow: 0.04em 0.05em 0 rgba(75, 36, 91, 0.35);
+}
