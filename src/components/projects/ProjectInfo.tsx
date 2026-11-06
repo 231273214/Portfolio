@@ -53,7 +53,7 @@ export default function ProjectInfo({ project }: { project: Project }) {
         </motion.p>
 
         <motion.ul variants={item} className="mt-4 flex flex-wrap gap-2 lg:mt-[1.4cqw] lg:gap-[0.7cqw]">
-          {project.tags.map((tag) => (
+          {(project.tags ?? []).map((tag) => (
             <li
               key={tag}
               className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs lg:px-[1.1cqw] lg:py-[0.45cqw] lg:text-[0.95cqw]"

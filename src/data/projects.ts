@@ -1,3 +1,21 @@
+export interface ProjectDetailData {
+  role: string;
+  year: string;
+  duration: string;
+  links: { site?: string; github?: string };
+  stack: string[];
+  screens: { label: string; image?: string }[];
+  problem?: { text: string; before: string[] };
+  solution?: {
+    text: string;
+    after: string[];
+    beforeImage?: string;
+    afterImage?: string;
+  };
+  process?: { title: string; text: string }[];
+  metrics?: { value: number; prefix?: string; suffix?: string; label: string }[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -5,20 +23,56 @@ export interface Project {
   category: string;
   description: string;
   tags: string[];
-  hue: number; // color del placeholder mientras no haya imagen
-  imagepc?: string;
-  imagemo?:string;
+  hue: number;
+  detail?: ProjectDetailData;
 }
 
 export const projects: Project[] = [
   {
-    id: "proyecto-1",
-    title: "Cafe origen",
-    subtitle: "E-commerce & Rediseño UI/UX",
-    category: "E-commerce / UI/UX",
-    description: "Rediseño y refactorización de una plataforma de comercio electrónico de café de especialidad, enfocado en experiencia interactiva, rendimiento móvil y conversión.",
-    tags: ["Web Responsive", "E-commerce / UI/UX"],
-    hue: 28,
+    id: "proyecto-1",              // idealmente un slug real
+    title: "Proyecto 1",           // ← faltaba
+    subtitle: "E-commerce",        // ← faltaba
+    category: "Web App",           // ← faltaba
+    description: "Descripción breve.", // ← faltaba
+    tags: ["React", "Stripe"],     // ← faltaba
+    hue: 200,                      // ← faltaba
+    detail: {
+      role: "UX/UI + Frontend",
+      year: "2026",
+      duration: "3 meses",
+      links: { site: "https://ejemplo.com", github: "https://github.com/tu-usuario/repo" },
+      stack: ["React", "Tailwind CSS", "Stripe", "Framer Motion"],
+      screens: [{ label: "Home" }, { label: "Catálogo" }, { label: "Checkout" }],
+      problem: {
+        text: "El e-commerce se diseñó para vender, pero no para retener a las personas hasta que compraran.",
+        before: [
+          "Interfaz plana, estática y poco atractiva.",
+          "Estructura rígida, difícil de navegar.",
+          "Tiempos de carga lentos y métricas bajas.",
+          "Checkout genérico sin retroalimentación visual.",
+        ],
+      },
+      solution: {
+        text: "Rediseñé la experiencia completa con foco en rendimiento móvil, microinteracciones y un flujo de compra claro.",
+        after: [
+          "Interfaz viva, con jerarquía visual clara.",
+          "Navegación simple e intuitiva.",
+          "Carga optimizada en móvil.",
+          "Checkout con feedback en cada paso.",
+        ],
+      },
+      process: [
+        { title: "Investigación", text: "Análisis de la tienda actual y de la competencia." },
+        { title: "Diseño", text: "Wireframes, sistema visual y prototipo en Figma." },
+        { title: "Desarrollo", text: "Componentes reutilizables en React y pagos con Stripe." },
+        { title: "Pruebas", text: "Ajustes de rendimiento y pruebas de usabilidad." },
+      ],
+      metrics: [
+        { value: 90, suffix: "/100", label: "Lighthouse móvil (ejemplo)" },
+        { value: 40, suffix: "%", label: "Menos tiempo de carga (ejemplo)" },
+        { value: 25, suffix: "%", label: "Más conversión (ejemplo)" },
+      ],
+    },
   },
   {
     id: "proyecto-2",
