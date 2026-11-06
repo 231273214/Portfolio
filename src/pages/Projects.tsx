@@ -1,20 +1,20 @@
-import { Link } from "react-router";
 import PageTransition from "../components/layout/PageTransition";
-import { projects } from "../data/projects";
+import ProjectsStage from "../components/projects/ProjectsStage";
+import ProjectsMobile from "../components/projects/ProjectsMobile";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useProjectSelection } from "../hooks/useProjectSelection";
 
 export default function Projects() {
+  const sel = useProjectSelection();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   return (
     <PageTransition>
-      <h1 className="mb-6 text-4xl">Projects (ProjectsGrid)</h1>
-      <ul className="space-y-2">
-        {projects.map((p) => (
-          <li key={p.id}>
-            <Link to={`/projects/${p.id}`} className="underline">
-              {p.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {isDesktop ? (
+        <ProjectsStage {...sel} />
+      ) : (
+        <ProjectsMobile selectedId={sel.selectedId} select={sel.select} />
+      )}
     </PageTransition>
   );
 }

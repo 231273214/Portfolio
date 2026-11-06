@@ -2,15 +2,17 @@ import { tracks } from "../../lib/music";
 import { useAudioStore } from "../../store/useAudioStore";
 import { useMusicStore } from "../../store/useMusicStore";
 import { useSound } from "../../hooks/useSound";
+import { useLocation } from "react-router";
 
 export default function MusicPlayer() {
+  const { pathname } = useLocation();
   const hasEntered = useAudioStore((s) => s.hasEntered);
   const soundEnabled = useAudioStore((s) => s.soundEnabled);
   const toggleSound = useAudioStore((s) => s.toggleSound);
   const { isPlaying, trackIndex, toggle, play, next, prev } = useMusicStore();
   const { onHover, onClick } = useSound();
 
-  if (!hasEntered) return null;
+  if (!hasEntered || pathname !== "/") return null;
 
   const audible = soundEnabled && isPlaying;
 
