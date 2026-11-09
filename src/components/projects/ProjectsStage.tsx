@@ -6,13 +6,28 @@ import ProjectCard from "./ProjectCard";
 import ProjectInfo from "./ProjectInfo";
 import ProjectMockup from "./ProjectMockup";
 
+type Slot = { x: number; y: number; rotateX: number; rotateY: number; rotate: number; scale: number };
+
 // Cuatro espacios a la izquierda (centro de cada tarjeta, en % del escenario)
-const SLOTS = [
-  { x: 13, y: 24, rotateX: 52, rotateY: 6, rotate: 20, scale: 1 },
-  { x: 37, y: 30, rotateX: 52, rotateY: 4, rotate: 18, scale: 0.9 },
-  { x: 13, y: 61, rotateX: 52, rotateY: 8, rotate: 20, scale: 1.05 },
-  { x: 37, y: 72, rotateX: 52, rotateY: 4, rotate: 16, scale: 1 },
-];
+const SLOT_LAYOUTS: Record<number, Slot[]> = {
+  4: [
+    { x: 13, y: 24, rotateX: 52, rotateY: 6, rotate: 20, scale: 1 },
+    { x: 37, y: 30, rotateX: 52, rotateY: 4, rotate: 18, scale: 0.9 },
+    { x: 13, y: 61, rotateX: 52, rotateY: 8, rotate: 20, scale: 1.05 },
+    { x: 37, y: 72, rotateX: 52, rotateY: 4, rotate: 16, scale: 1 },
+  ],
+  3: [
+    { x: 14, y: 28, rotateX: 52, rotateY: 6, rotate: 20, scale: 1.05 },
+    { x: 30, y: 62, rotateX: 52, rotateY: 6, rotate: 18, scale: 1.1 },
+    { x: 14, y: 80, rotateX: 52, rotateY: 8, rotate: 20, scale: 0.9 },
+  ],
+  2: [
+    { x: 16, y: 32, rotateX: 52, rotateY: 6, rotate: 20, scale: 1.1 },
+    { x: 32, y: 66, rotateX: 52, rotateY: 5, rotate: 18, scale: 1.15 },
+  ],
+};
+
+const SLOTS = SLOT_LAYOUTS[projects.length - 1] ?? SLOT_LAYOUTS[4];
 
 // Mockup destacado dentro del círculo (más pequeño y más abajo para no tapar el botón)
 const FEATURED = { x: 75, y: 76, rotateX: 10, rotateY: -10, rotate: 1, scale: 1.76 };

@@ -25,31 +25,40 @@ export interface Project {
   tags: string[];
   hue: number;
   detail?: ProjectDetailData;
+  image?: string;
+  mobileImage?: string;
+  hidden?: boolean;
 }
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   {
-    id: "proyecto-1",              // idealmente un slug real
-    title: "Proyecto 1",           // ← faltaba
-    subtitle: "E-commerce",        // ← faltaba
-    category: "Web App",           // ← faltaba
-    description: "Descripción breve.", // ← faltaba
-    tags: ["React", "Stripe"],     // ← faltaba
-    hue: 200,                      // ← faltaba
+    id: "proyecto-1",
+    title: "Proyecto 1",
+    image: "/public/projects/project_1/home.png",
+    mobileImage: "/public/projects/project_1/mobile.png",
+    subtitle: "E-commerce",
+    category: "Web App",
+    description: "Descripción breve.",
+    tags: ["React", "Stripe"],
+    hue: 200,
     detail: {
       role: "UX/UI + Frontend",
       year: "2026",
       duration: "3 meses",
       links: { site: "https://ejemplo.com", github: "https://github.com/tu-usuario/repo" },
       stack: ["React", "Tailwind CSS", "Stripe", "Framer Motion"],
-      screens: [{ label: "Home" }, { label: "Catálogo" }, { label: "Checkout" }],
+      screens: [
+        { label: "Home", image: "/projects/project_1/home.png" },
+        { label: "Catálogo", image: "/projects/project_1/productos.png" },
+        { label: "Carrito", image: "/projects/project_1/carrito.png" },
+      ],
       problem: {
         text: "El e-commerce se diseñó para vender, pero no para retener a las personas hasta que compraran.",
         before: [
           "Interfaz plana, estática y poco atractiva.",
           "Estructura rígida, difícil de navegar.",
           "Tiempos de carga lentos y métricas bajas.",
-          "Checkout genérico sin retroalimentación visual.",
+          "Carrito genérico sin retroalimentación visual.",
         ],
       },
       solution: {
@@ -60,6 +69,8 @@ export const projects: Project[] = [
           "Carga optimizada en móvil.",
           "Checkout con feedback en cada paso.",
         ],
+        beforeImage: "/projects/project_1/home_antes.png",
+        afterImage: "/projects/project_1/home.png",
       },
       process: [
         { title: "Investigación", text: "Análisis de la tienda actual y de la competencia." },
@@ -100,6 +111,7 @@ export const projects: Project[] = [
     description: "Plataforma web PWA para el control de inventario en tiempo real, diseñada con un enfoque en simplicidad de uso, escaneo rápido de productos y métricas de ventas para pequeños y medianos negocios.",
     tags: ["PWA", "Dashboard"],
     hue: 250,
+    hidden: true, // proyecto oculto
   },
   {
     id: "proyecto-5",
@@ -109,5 +121,8 @@ export const projects: Project[] = [
     description: "Descripción pendiente. Aquí irá un resumen de dos o tres líneas del proyecto.",
     tags: ["3D", "Creative Coding"],
     hue: 310,
+    hidden: true, // proyecto oculto
   },
 ];
+
+export const projects: Project[] = allProjects.filter((p) => !p.hidden);
