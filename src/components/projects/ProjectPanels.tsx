@@ -7,7 +7,7 @@ import { useSound } from "../../hooks/useSound";
 
 export interface PanelDef {
   id: string;
-  label: string; // etiqueta del mini menú (varios paneles pueden compartirla)
+  label: string;
   node: ReactNode;
 }
 
@@ -84,13 +84,29 @@ function CountUp({ value, prefix = "", suffix = "" }: { value: number; prefix?: 
 const gradient = (hue: number) =>
   `linear-gradient(135deg, hsl(${hue} 55% 32%), hsl(${hue + 40} 65% 12%))`;
 
-function Shot({ image, bg, label }: { image?: string; bg: string; label: string }) {
+function Shot({image, bg, label, fill = false, className = "",
+}: {
+  image?: string;
+  bg: string;
+  label: string;
+  fill?: boolean; 
+  className?: string;
+}) {
   return (
-    <div className="absolute inset-0" style={{ background: bg }}>
+    <div className={fill ? "absolute inset-0" : "relative"} style={{ background: bg }}>
       {image ? (
-        <img src={image} alt="" draggable={false} className="h-full w-full object-cover" />
+        <img
+          src={image}
+          alt=""
+          draggable={false}
+          className={fill ? "h-full w-full object-cover" : `block h-auto w-full ${className}`}
+        />
       ) : (
-        <span className="absolute inset-0 grid place-items-center text-2xl opacity-40">{label}</span>
+        <div className={fill ? "h-full w-full" : "aspect-[16/10] w-full"}>
+          <span className="absolute inset-0 grid place-items-center text-2xl opacity-40">
+            {label}
+          </span>
+        </div>
       )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent" />
     </div>
@@ -201,11 +217,7 @@ function ScreenPanel({
 }) {
   return (
     <Panel className="lg:w-[64vw]">
-      <motion.div
-        {...reveal()}
-        whileHover={{ scale: 1.015 }}
-        className="w-full lg:w-[min(54vw,88svh)]"
-      >
+      <motion.div {...reveal()} whileHover={{ scale: 1.015 }} className="w-full lg:w-fit lg:max-w-[54vw]">
         <div className="overflow-hidden rounded-xl border border-white/25 bg-black/30 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)]">
           <div className="flex items-center gap-2 border-b border-white/10 bg-white/10 px-4 py-2.5">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b6b]" />
@@ -215,9 +227,12 @@ function ScreenPanel({
               {project.title} · {screen.label}
             </span>
           </div>
-          <div className="relative aspect-[16/10]">
-            <Shot image={screen.image} bg={gradient(project.hue)} label={screen.label} />
-          </div>
+          <Shot
+            image={screen.image}
+            bg={gradient(project.hue)}
+            label={screen.label}
+            className="lg:w-auto lg:max-h-[62svh] lg:max-w-[54vw]"
+          />
         </div>
       </motion.div>
       <p className="mt-4 text-sm opacity-70">
@@ -227,12 +242,12 @@ function ScreenPanel({
   );
 }
 
-function Problem({ data }: { data: NonNullable<Project["detail"]>["problem"] }) {
+function Problem({ data, n }: { data: NonNullable<Project["detail"]>["problem"]; n: string }) {
   if (!data) return null;
   return (
     <Panel className="lg:w-[46vw] lg:min-w-[520px]">
       <Reveal>
-        <SectionTitle n="01" title="Problema" />
+        <SectionTitle n={n} title="Problema" />
       </Reveal>
       <Reveal delay={0.1} className="mt-6">
         <p className="max-w-xl leading-relaxed opacity-80 lg:text-[clamp(1rem,1.3vw,1.3rem)]">{data.text}</p>
@@ -266,11 +281,11 @@ function BeforeAfter({
   const [pos, setPos] = useState(50);
 
   return (
-    <div className="relative aspect-[16/10] w-full select-none overflow-hidden rounded-xl border border-white/25 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)]">
+    <div className="relative w-full select-none overflow-hidden rounded-xl border border-white/25 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)]">
       <Shot image={beforeImage} bg="linear-gradient(135deg,#8a8697,#3d3a47)" label="Antes" />
-      <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
-        <Shot image={afterImage} bg={gradient(project.hue)} label="Después" />
-      </div>
+    <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
+      <Shot image={afterImage} bg={gradient(project.hue)} label="Después" fill />
+    </div>
 
       <span className="absolute left-3 top-3 rounded-full bg-black/40 px-3 py-1 text-xs">Antes</span>
       <span className="absolute right-3 top-3 rounded-full bg-black/40 px-3 py-1 text-xs">Después</span>
@@ -299,13 +314,13 @@ function BeforeAfter({
   );
 }
 
-function Solution({ project }: { project: Project }) {
+function Solution({ project, n }: { project: Project; n: string }) {
   const data = project.detail?.solution;
   if (!data) return null;
   return (
     <Panel className="lg:w-[74vw]">
       <Reveal>
-        <SectionTitle n="02" title="Solución" />
+        <SectionTitle n={n} title="Solución" />
       </Reveal>
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-center lg:gap-12">
         <div>
@@ -334,11 +349,11 @@ function Solution({ project }: { project: Project }) {
   );
 }
 
-function Process({ steps }: { steps: { title: string; text: string }[] }) {
+function Process({ steps, n }: { steps: NonNullable<Project["detail"]>["process"]; n: string }) {
   return (
     <Panel className="lg:w-auto">
       <Reveal>
-        <SectionTitle n="03" title="Proceso" />
+        <SectionTitle n={n} title="Proceso" />
       </Reveal>
       <ol className="mt-12 flex flex-col gap-8 lg:flex-row">
         {steps.map((s, i) => (
@@ -349,7 +364,7 @@ function Process({ steps }: { steps: { title: string; text: string }[] }) {
           >
             <span
               aria-hidden
-              className="absolute -top-[7px] left-0 h-3 w-3 rounded-full bg-[#b36bff] shadow-[0_0_12px_#b36bff]"
+              className="absolute -top-[7px] left-0 h-3 w-3 rounded-full bg-[var(--accent,#b36bff)] shadow-[0_0_12px_var(--accent,#b36bff)]"
             />
             <p className="text-5xl opacity-30">{String(i + 1).padStart(2, "0")}</p>
             <h3 className="mt-2 text-xl">{s.title}</h3>
@@ -361,11 +376,11 @@ function Process({ steps }: { steps: { title: string; text: string }[] }) {
   );
 }
 
-function Metrics({ metrics }: { metrics: NonNullable<NonNullable<Project["detail"]>["metrics"]> }) {
+function Metrics({ metrics, n }: { metrics: NonNullable<NonNullable<Project["detail"]>["metrics"]>; n: string }) {
   return (
     <Panel className="lg:w-[62vw]">
       <Reveal>
-        <SectionTitle n="04" title="Resultados" />
+        <SectionTitle n={n} title="Resultados" />
       </Reveal>
       <ul className="mt-10 grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-5">
         {metrics.map((m, i) => (
@@ -374,8 +389,12 @@ function Metrics({ metrics }: { metrics: NonNullable<NonNullable<Project["detail
             {...reveal(i * 0.1)}
             className="rounded-2xl border border-white/20 bg-white/10 p-6"
           >
-            <p className="text-5xl leading-none lg:text-[clamp(2.6rem,4.2vw,4.5rem)]">
-              <CountUp value={m.value} prefix={m.prefix} suffix={m.suffix} />
+            <p className="text-5xl leading-none lg:text-[clamp(2.6rem,4.2vw,4.5rem)] tabular-nums">
+              <CountUp value={m.value} prefix={m.prefix} />
+              
+              {m.suffix && (
+                <span className="text-[0.55em] opacity-70">{m.suffix}</span>
+              )}
             </p>
             <p className="mt-3 text-sm opacity-70">{m.label}</p>
           </motion.li>
@@ -414,10 +433,69 @@ function Outro({ next }: { next: Project }) {
   );
 }
 
+function Features({ items, n }: { items: { title: string; text: string }[]; n: string }) {
+  return (
+    <Panel className="lg:w-[68vw]">
+      <Reveal>
+        <SectionTitle n={n} title="Funcionalidades" />
+      </Reveal>
+      <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((f, i) => (
+          <motion.li
+            key={f.title}
+            {...reveal(i * 0.08)}
+            className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-6 transition duration-300 hover:-translate-y-1.5 hover:border-[var(--accent,#b36bff)]"
+          >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-60"
+              style={{ background: "var(--accent, #b36bff)" }}
+            />
+            <p className="text-4xl opacity-30">{String(i + 1).padStart(2, "0")}</p>
+            <h3 className="mt-3 text-lg">{f.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed opacity-70">{f.text}</p>
+          </motion.li>
+        ))}
+      </ul>
+    </Panel>
+  );
+}
+
+function Tech({ groups, n }: { groups: { label: string; items: string[] }[]; n: string }) {
+  return (
+    <Panel className="lg:w-[56vw]">
+      <Reveal>
+        <SectionTitle n={n} title="Tecnología" />
+      </Reveal>
+      <div className="mt-10 grid gap-5 sm:grid-cols-2">
+        {groups.map((g, i) => (
+          <motion.div
+            key={g.label}
+            {...reveal(i * 0.08)}
+            className="rounded-2xl border border-white/20 bg-white/5 p-5"
+          >
+            <p className="text-xs uppercase tracking-wider opacity-50">{g.label}</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {g.items.map((it) => (
+                <li key={it} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm">
+                  {it}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ))}
+      </div>
+    </Panel>
+  );
+}
+
 /* ---------- Ensamblado ---------- */
 
 export function buildPanels(project: Project, next: Project): PanelDef[] {
   const d = project.detail;
+  let count = 0; 
+  const num = () => String(++count).padStart(2, "0");
+  
   const panels: PanelDef[] = [{ id: "intro", label: "Intro", node: <Intro project={project} /> }];
 
   const screens = d?.screens?.length ? d.screens : [{ label: "Pantalla principal" }];
@@ -429,11 +507,14 @@ export function buildPanels(project: Project, next: Project): PanelDef[] {
     })
   );
 
-  if (d?.problem) panels.push({ id: "problem", label: "Problema", node: <Problem data={d.problem} /> });
-  if (d?.solution) panels.push({ id: "solution", label: "Solución", node: <Solution project={project} /> });
-  if (d?.process?.length) panels.push({ id: "process", label: "Proceso", node: <Process steps={d.process} /> });
-  if (d?.metrics?.length) panels.push({ id: "metrics", label: "Resultados", node: <Metrics metrics={d.metrics} /> });
+  if (d?.problem) panels.push({ id: "problem", label: "Problema", node: <Problem data={d.problem} n={num()} /> });
+  if (d?.solution) panels.push({ id: "solution", label: "Solución", node: <Solution project={project} n={num()} /> });
+  if (d?.features?.length) panels.push({ id: "features", label: "Funciones", node: <Features items={d.features} n={num()} /> });
+  if (d?.stackGroups?.length) panels.push({ id: "tech", label: "Tecnología", node: <Tech groups={d.stackGroups} n={num()} /> });
+  if (d?.process?.length) panels.push({ id: "process", label: "Proceso", node: <Process steps={d.process} n={num()} /> });
+  if (d?.metrics?.length) panels.push({ id: "metrics", label: "Resultados", node: <Metrics metrics={d.metrics} n={num()} /> });
 
   panels.push({ id: "outro", label: "Siguiente", node: <Outro next={next} /> });
-  return panels;
+  
+  return panels; 
 }
