@@ -84,8 +84,7 @@ function CountUp({ value, prefix = "", suffix = "" }: { value: number; prefix?: 
 const gradient = (hue: number) =>
   `linear-gradient(135deg, hsl(${hue} 55% 32%), hsl(${hue + 40} 65% 12%))`;
 
-function Shot({image, bg, label, fill = false, className = "",
-}: {
+function Shot({ image, bg, label, fill = false, className = "" }: {
   image?: string;
   bg: string;
   label: string;
@@ -149,11 +148,15 @@ function Intro({ project }: { project: Project }) {
 
         {d && (
           <Reveal delay={0.24} className="mt-6">
-            <dl className="grid max-w-[34rem] grid-cols-3 gap-4 border-y border-white/15 py-4 text-sm">
+            <dl
+              className="grid max-w-[34rem] gap-4 border-y border-white/15 py-4 text-sm"
+              style={{ gridTemplateColumns: `repeat(${d.status ? 4 : 3}, minmax(0, 1fr))` }}
+            >
               {[
                 { k: "Rol", v: d.role },
                 { k: "Año", v: d.year },
                 { k: "Duración", v: d.duration },
+                ...(d.status ? [{ k: "Estado", v: d.status }] : []),
               ].map(({ k, v }) => (
                 <div key={k}>
                   <dt className="text-xs uppercase tracking-wider opacity-50">{k}</dt>
@@ -316,7 +319,9 @@ function BeforeAfter({
 
 function Solution({ project, n }: { project: Project; n: string }) {
   const data = project.detail?.solution;
+  
   if (!data) return null;
+  
   return (
     <Panel className="lg:w-[74vw]">
       <Reveal>
@@ -413,12 +418,21 @@ function Outro({ next }: { next: Project }) {
         <p className="text-sm uppercase tracking-wider opacity-50">Siguiente proyecto</p>
       </Reveal>
       <Reveal delay={0.1} className="mt-4">
-        <Link to={`/projects/${next.id}`} onMouseEnter={onHover} onClick={onClick} className="inline-block">
-          <SwapText
-            text={next.title}
-            swap="ver proyecto →"
-            className="text-[clamp(2.5rem,7vw,7rem)]"
-          />
+        <Link to={`/projects/${next.id}`} onMouseEnter={onHover} onClick={onClick} className="block">
+          {/* Móvil: texto normal que parte por palabras */}
+          <span className="block text-[clamp(2rem,10vw,3.5rem)] leading-[1.1] lg:hidden">
+            {next.title}
+            <span className="mt-3 block text-lg opacity-70">Ver proyecto →</span>
+          </span>
+
+          {/* Escritorio: efecto de cambio */}
+          <div className="hidden lg:block">
+            <SwapText
+              text={next.title}
+              swap="ver proyecto →"
+              className="text-[clamp(2.5rem,5vw,5.5rem)]"
+            />
+          </div>
         </Link>
       </Reveal>
       <Reveal delay={0.2} className="mt-10 flex flex-wrap items-center gap-4">
@@ -433,11 +447,19 @@ function Outro({ next }: { next: Project }) {
   );
 }
 
-function Features({ items, n }: { items: { title: string; text: string }[]; n: string }) {
+function Features({
+  items,
+  n,
+  title = "Funcionalidades",
+}: {
+  items: { title: string; text: string }[];
+  n: string;
+  title?: string;
+}) {
   return (
     <Panel className="lg:w-[68vw]">
       <Reveal>
-        <SectionTitle n={n} title="Funcionalidades" />
+        <SectionTitle n={n} title={title} />
       </Reveal>
       <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((f, i) => (
@@ -489,6 +511,77 @@ function Tech({ groups, n }: { groups: { label: string; items: string[] }[]; n: 
   );
 }
 
+type StoryData = NonNullable<NonNullable<Project["detail"]>["story"]>;
+
+function Story({ data, n }: { data: StoryData; n: string }) {
+  return (
+    <Panel className="lg:w-[62vw]">
+      <Reveal>
+        <SectionTitle n={n} title={data.title ?? "Historia"} />
+      </Reveal>
+      <Reveal delay={0.1} className="mt-8">
+        <p className="max-w-2xl leading-relaxed opacity-90 lg:text-[clamp(1.1rem,1.7vw,1.7rem)]">
+          {data.text}
+        </p>
+      </Reveal>
+      <ul className="mt-10 grid gap-4 sm:grid-cols-3">
+        {data.moments.map((m, i) => (
+          <motion.li
+            key={m.title}
+            {...reveal(0.15 + i * 0.1)}
+            className="rounded-2xl border border-white/20 bg-white/5 p-5"
+          >
+            <p className="text-sm text-[var(--accent,#b36bff)]">{String(i + 1).padStart(2, "0")}</p>
+            <h3 className="mt-2 text-lg">{m.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed opacity-70">{m.text}</p>
+          </motion.li>
+        ))}
+      </ul>
+    </Panel>
+  );
+}
+
+function Phones({
+  project,
+  screens,
+}: {
+  project: Project;
+  screens: { label: string; image?: string }[];
+}) {
+  return (
+    <Panel className="lg:w-auto">
+      <ul className="flex snap-x gap-6 overflow-x-auto px-1 py-8 [scrollbar-width:none] lg:gap-[2.5vw] lg:overflow-visible lg:px-[3vw] [&::-webkit-scrollbar]:hidden">
+        {screens.map((s, i) => (
+          <li
+            key={s.label}
+            className={`w-44 shrink-0 snap-center lg:w-[min(15vw,26svh)] ${
+              i % 2 ? "lg:translate-y-10" : "lg:-translate-y-6"
+            }`}
+          >
+            <motion.div {...reveal(i * 0.1)} whileHover={{ y: -12, rotate: i % 2 ? 1.5 : -1.5 }}>
+              <div className="overflow-hidden rounded-[2rem] border-[6px] border-[#14101c] shadow-[0_30px_50px_-15px_rgba(0,0,0,0.7)]">
+                {s.image ? (
+                  <img src={s.image} alt={`${project.title}: ${s.label}`} draggable={false} className="block h-auto w-full" />
+                ) : (
+                  <div
+                    className="grid aspect-[9/19.5] w-full place-items-center text-lg opacity-60"
+                    style={{ background: gradient(project.hue) }}
+                  >
+                    {s.label}
+                  </div>
+                )}
+              </div>
+              <p className="mt-4 text-center text-sm opacity-70">
+                {String(i + 1).padStart(2, "0")} — {s.label}
+              </p>
+            </motion.div>
+          </li>
+        ))}
+      </ul>
+    </Panel>
+  );
+}
+
 /* ---------- Ensamblado ---------- */
 
 export function buildPanels(project: Project, next: Project): PanelDef[] {
@@ -499,13 +592,21 @@ export function buildPanels(project: Project, next: Project): PanelDef[] {
   const panels: PanelDef[] = [{ id: "intro", label: "Intro", node: <Intro project={project} /> }];
 
   const screens = d?.screens?.length ? d.screens : [{ label: "Pantalla principal" }];
-  screens.forEach((screen, i) =>
-    panels.push({
-      id: `screen-${i}`,
-      label: "Pantallas",
-      node: <ScreenPanel project={project} screen={screen} index={i} total={screens.length} />,
-    })
-  );
+    if (project.device === "mobile") {
+      panels.push({
+        id: "phones",
+        label: "Pantallas",
+        node: <Phones project={project} screens={screens} />,
+      });
+    } else {
+      screens.forEach((screen, i) =>
+        panels.push({
+          id: `screen-${i}`,
+          label: "Pantallas",
+          node: <ScreenPanel project={project} screen={screen} index={i} total={screens.length} />,
+        })
+      );
+    }
 
   if (d?.problem) panels.push({ id: "problem", label: "Problema", node: <Problem data={d.problem} n={num()} /> });
   if (d?.solution) panels.push({ id: "solution", label: "Solución", node: <Solution project={project} n={num()} /> });

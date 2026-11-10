@@ -17,6 +17,13 @@ export interface ProjectDetailData {
   accent?: string; 
   features?: { title: string; text: string }[];
   stackGroups?: { label: string; items: string[] }[];
+  status?: string;
+  featuresTitle?: string;
+  story?: {
+    title?: string;
+    text: string;
+    moments: { title: string; text: string }[];
+  };
 }
 
 export interface Project {
@@ -31,6 +38,7 @@ export interface Project {
   image?: string;
   mobileImage?: string;
   hidden?: boolean;
+  device?: "web" | "mobile";
 }
 
 const allProjects: Project[] = [
@@ -44,7 +52,7 @@ const allProjects: Project[] = [
   description:
     "Rediseño completo de un e-commerce de café funcional: nueva identidad visual, experiencia responsive y un carrito lateral con flujo de compra simulado.",
   tags: ["Angular", "SCSS", "Figma"],
-  hue: 25, // tono café, acorde a la paleta del proyecto (#3A2318)
+  hue: 25, 
   detail: {
     role: "UX/UI + Frontend",
     year: "2026",
@@ -92,14 +100,56 @@ const allProjects: Project[] = [
   },
 },
   {
-    id: "proyecto-2",
-    title: "Mulsali",
-    subtitle: "Aplicación móvil",
-    category: "Android App",
-    description: "Aplicación móvil nativa desarrollada en Kotlin que reimagina la experiencia de reproducción musical al integrar elementos 3D interactivos y procesamiento de audio en tiempo real.",
-    tags: ["Mobile", "UI/UX"],
-    hue: 265,
+  id: "mulsali",
+  title: "Mulsali",
+  device: "mobile",
+  image: "/projects/mulsali/home.png",
+  mobileImage: "/projects/mulsali/home.png",
+  subtitle: "Reproductor de música para Android",
+  category: "Android App",
+  description:
+    "Reproductor de música para Android desarrollado en Kotlin. Funciona con tu propia música, sin depender de la nube, con una interfaz interactiva pensada para escuchar sin interrupciones.",
+  tags: ["Kotlin", "Android", "UI/UX"],
+  hue: 265,
+  detail: {
+    accent: "#76ABAE",
+    status: "En desarrollo",
+    role: "UX/UI + Desarrollo", // ajusta a tu rol real
+    year: "2026",
+    duration: "En curso",
+    links: {},
+    stack: ["Kotlin", "Android", "Figma"],
+    screens: [
+      { label: "Home", image: "/projects/mulsali/home.png" },
+      { label: "Reproductor", image: "/projects/mulsali/music.png" },
+      { label: "Biblioteca", image: "/projects/mulsali/library.png" },
+      { label: "Añadir música", image: "/projects/mulsali/add.png" },
+    ],
+    story: {
+      title: "Por qué Mulsali",
+      text: "Me gusta la música para trabajar, para caminar y para los viajes largos en bus o avión. Quería un reproductor que no se corte, que me deje elegir libremente qué escuchar y que siga sonando aunque apague la pantalla.",
+      moments: [
+        { title: "Al trabajar", text: "Una sesión larga sin interrupciones ni distracciones." },
+        { title: "Al caminar", text: "El celular en el bolsillo y la música siguiendo su curso." },
+        { title: "De viaje", text: "Buses y vuelos largos, con tu música lista sin depender de la conexión." },
+      ],
+    },
+    featuresTitle: "Qué ofrece",
+    features: [
+      { title: "Tu música, tus archivos", text: "Añades tus propias canciones. La app no incluye catálogo ni depende de la nube." },
+      { title: "Sin cortes", text: "La reproducción continúa con la pantalla apagada." },
+      { title: "Elige libremente", text: "Tú decides qué suena y en qué orden." },
+      { title: "Biblioteca propia", text: "Un espacio para organizar y encontrar tu música." },
+      { title: "Interfaz interactiva", text: "Pensada con criterios de UX/UI para que escuchar sea fluido y claro." },
+      { title: "Hecha para Android", text: "Desarrollo nativo en Kotlin." },
+    ],
+    process: [
+      { title: "Idea", text: "Definir qué debe hacer bien un reproductor para el día a día." },
+      { title: "Diseño", text: "Pantallas de Home, reproductor, biblioteca y añadir música en Figma." },
+      { title: "Desarrollo", text: "Construcción nativa en Kotlin. En curso." },
+    ],
   },
+},
   {
   id: "kinzha-audiovisuals",
   title: "Kinzha Audiovisuals",
@@ -113,9 +163,9 @@ const allProjects: Project[] = [
   hue: 0,
   detail: {
     accent: "#e11d2e",
-    role: "UX/UI + Full-stack", // ajusta a tu rol real
+    role: "UX/UI + Full-stack", 
     year: "2026",
-    duration: "3 meses", // ajusta
+    duration: "3 meses", 
     links: {}, // añade site y github cuando los tengas
     stack: ["Next.js", "TypeScript", "Tailwind CSS", "React Three Fiber", "Prisma"],
     stackGroups: [

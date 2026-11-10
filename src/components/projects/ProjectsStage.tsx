@@ -5,6 +5,7 @@ import { useSound } from "../../hooks/useSound";
 import ProjectCard from "./ProjectCard";
 import ProjectInfo from "./ProjectInfo";
 import ProjectMockup from "./ProjectMockup";
+import ProjectPhone from "./ProjectPhone";
 
 type Slot = { x: number; y: number; rotateX: number; rotateY: number; rotate: number; scale: number };
 
@@ -149,7 +150,11 @@ export default function ProjectsStage({ selectedId, slots, index, select, next, 
                   animate={{ opacity: isSelected ? 0 : 1 }}
                   transition={{ duration: 0.35 }}
                 >
-                  <ProjectCard project={project} />
+                  {project.device === "mobile" ? (
+                    <ProjectPhone project={project} />
+                  ) : (
+                    <ProjectCard project={project} />
+                  )}
                 </motion.div>
                 <motion.div
                   className="absolute inset-0"

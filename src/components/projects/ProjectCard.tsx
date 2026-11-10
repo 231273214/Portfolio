@@ -12,7 +12,17 @@ export default function ProjectCard({ project }: { project: Project }) {
           background: `linear-gradient(135deg, hsl(${hue} 55% 32%), hsl(${hue + 40} 65% 12%))`,
         }}
       />
-      {project.image ? (
+      {project.device === "mobile" && (project.mobileImage ?? project.image) ? (
+        <div className="absolute right-[10%] top-[8%] h-[70%] w-[20%] overflow-hidden rounded-[2cqw] border-[0.6cqw] border-[#14101c]">
+          <img
+            src={project.mobileImage ?? project.image}
+            alt=""
+            loading="lazy"
+            draggable={false}
+            className="h-full w-full object-cover object-top"
+          />
+        </div>
+      ) : project.image ? (
         <img
           src={project.image}
           alt=""
