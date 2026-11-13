@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router";
 import { AnimatePresence } from "motion/react";
 import Navbar from "./components/layout/Navbar";
 import EntryModal from "./components/audio/EntryModal";
-import SoundToggle from "./components/audio/SoundToggle";
 import { useAudioStore } from "./store/useAudioStore";
 import { playSound } from "./lib/sounds";
 import Home from "./pages/Home";
