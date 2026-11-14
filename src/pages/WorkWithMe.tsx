@@ -66,7 +66,6 @@ export default function WorkWithMe() {
         <div className="glass mt-10 w-full overflow-hidden rounded-2xl">
           {status === "sent" ? (
             <div className="flex flex-col items-center gap-4 px-6 py-16 text-center" role="status">
-              <span className="text-5xl">✨</span>
               <p className="text-2xl font-bold">¡Mensaje enviado!</p>
               <p className="max-w-md text-sm opacity-70">
                 Gracias por escribirme. Me pondré en contacto contigo muy pronto.
