@@ -58,8 +58,8 @@ const allProjects: Project[] = [
     year: "2026",
     duration: "4 dias",
     links: {
-      site: "TODO: URL del sitio publicado",
-      github: "TODO: https://github.com/tu-usuario/repo",
+      site: "https://e-commerce-cafe-788amjgzi-sergio-9cee9b7d.vercel.app/",
+      github: "https://github.com/231273214/E--commerce_Cafe",
     },
     stack: ["Angular", "TypeScript", "SCSS", "Bootstrap", "Figma"],
     screens: [
@@ -114,7 +114,7 @@ const allProjects: Project[] = [
   detail: {
     accent: "#76ABAE",
     status: "En desarrollo",
-    role: "UX/UI + Desarrollo", // ajusta a tu rol real
+    role: "UX/UI + Desarrollo", 
     year: "2026",
     duration: "En curso",
     links: {},
@@ -166,7 +166,10 @@ const allProjects: Project[] = [
     role: "UX/UI + Full-stack", 
     year: "2026",
     duration: "3 meses", 
-    links: {}, // añade site y github cuando los tengas
+    links: {
+      site: "https://kinzha-audiovisuals-website.vercel.app/",
+      github: "https://github.com/231273214/KinzhaAudiovisuals_Website",
+    }, 
     stack: ["Next.js", "TypeScript", "Tailwind CSS", "React Three Fiber", "Prisma"],
     stackGroups: [
       { label: "Frontend", items: ["Next.js (App Router)", "React 19", "TypeScript", "Tailwind CSS v4"] },
