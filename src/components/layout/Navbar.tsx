@@ -6,15 +6,22 @@ import SoundToggle from "../audio/SoundToggle";
 import ThemeToggle from "../ui/ThemeToggle";
 import SwapText from "../ui/SwapText";
 
-const links = [
+type NavItem = {
+  to: string;
+  label: string;
+  cta?: boolean;
+  hidden?: boolean;
+};
+
+const allLinks: NavItem[] = [
   { to: "/", label: "Home" },
   { to: "/projects", label: "Projects" },
-  { to: "/gallery", label: "Gallery" },
+  { to: "/gallery", label: "Gallery", hidden: true },
   { to: "/lab", label: "Lab" },
   { to: "/work-with-me", label: "Work with me", cta: true },
 ];
+const links = allLinks.filter((l) => !l.hidden);
 
-// "line" = línea líquida · "dot" = gota
 const INDICATOR: "line" | "dot" = "line";
 
 // Cabeza rápida + cola lenta = efecto de estiramiento
@@ -71,7 +78,7 @@ function MailIcon() {
 export default function Navbar() {
   const { onHover, onClick } = useSound();
   const { pathname } = useLocation();
-  const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const linkRefs = useRef<(HTMLElement | null)[]>([]);
   const [pos, setPos] = useState<{ x: number; w: number; y: number } | null>(null);
 
   const activeIndex = links.findIndex((l) => isActive(pathname, l.to));
@@ -158,19 +165,17 @@ export default function Navbar() {
               key={to}
               to={to}
               end={to === "/"}
-              ref={(el) => {
-                linkRefs.current[i] = el;
-              }}
+              ref={(el) => { linkRefs.current[i] = el; }}
               onMouseEnter={onHover}
               onClick={onClick}
               className={({ isActive }) =>
                 `flex items-center gap-2 rounded-xl px-3 py-2 text-xs transition-opacity md:gap-3 md:px-4 md:text-sm ${
                   cta ? "relief" : ""
-                } ${isActive || cta ? "opacity-100" : "opacity-70 hover:opacity-100"}`
+                } ${isActive ? "opacity-100" : "opacity-70 hover:opacity-100"}`
               }
             >
               {cta && <MailIcon />}
-              {cta ? <span className="sr-only md:not-sr-only">{label}</span> : label}
+              <span className={cta ? "sr-only md:not-sr-only" : ""}>{label}</span>
             </NavLink>
           ))}
         </motion.nav>
