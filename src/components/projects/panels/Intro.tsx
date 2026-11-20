@@ -36,26 +36,30 @@ export default function Intro({ project }: { project: Project }) {
           </p>
         </Reveal>
 
-        {d && (
-          <Reveal delay={0.24} className="mt-6">
-            <dl
-              className="grid max-w-[34rem] gap-4 border-y border-white/15 py-4 text-sm"
-              style={{ gridTemplateColumns: `repeat(${d.status ? 4 : 3}, minmax(0, 1fr))` }}
-            >
-              {[
-                { k: "Rol", v: d.role },
-                { k: "Año", v: d.year },
-                { k: "Duración", v: d.duration },
-                ...(d.status ? [{ k: "Estado", v: d.status }] : []),
-              ].map(({ k, v }) => (
-                <div key={k}>
-                  <dt className="text-xs uppercase tracking-wider opacity-50">{k}</dt>
-                  <dd className="mt-1">{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-        )}
+        {d && (() => {
+          const facts = [
+            { k: "Rol", v: d.role },
+            { k: "Año", v: d.year },
+            { k: "Duración", v: d.duration },
+            { k: "Estado", v: d.status },
+          ].filter((f): f is { k: string; v: string } => Boolean(f.v));
+
+          return (
+            <Reveal delay={0.24} className="mt-6">
+              <dl
+                className="grid max-w-[34rem] gap-4 border-y border-white/15 py-4 text-sm"
+                style={{ gridTemplateColumns: `repeat(${facts.length}, minmax(0, 1fr))` }}
+              >
+                {facts.map(({ k, v }) => (
+                  <div key={k}>
+                    <dt className="text-xs uppercase tracking-wider opacity-50">{k}</dt>
+                    <dd className="mt-1">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+          );
+        })()}
 
         <Reveal delay={0.32}>
           <ul className="mt-5 flex flex-wrap gap-2">

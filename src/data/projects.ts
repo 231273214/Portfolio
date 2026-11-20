@@ -38,7 +38,7 @@ export interface Project {
   image?: string;
   mobileImage?: string;
   hidden?: boolean;
-  device?: "web" | "mobile";
+  device?: "web" | "mobile" | "desktop";
 }
 
 const allProjects: Project[] = [
@@ -216,6 +216,56 @@ const allProjects: Project[] = [
       { title: "Diseño", text: "Paleta noir, tarjetas con revelado en hover y reorganización de la navegación." },
       { title: "Desarrollo", text: "Componentes en Next.js, escena 3D, carrito, checkout simulado y envío de correos." },
       { title: "Despliegue", text: "Migraciones de Prisma, variables de entorno y publicación en Vercel." },
+    ],
+  },
+},
+{
+  id: "cadence-of-shadows",
+  title: "Cadence of Shadows",
+  device: "desktop",
+  image: "/projects/cadence/home.png",
+  subtitle: "Videojuego 2.5D de acción y thriller psicológico",
+  category: "Videojuego / PC",
+  description:
+    "Thriller psicológico y de acción 2.5D ambientado en la Colombia de los años 70. Entre la bruma de Bogotá, la violencia de las calles y el jazz disonante, cada pista es una nota en la partitura de un crimen sin resolver.",
+  tags: ["Unreal Engine 5.3", "Blender", "3D"],
+  hue: 210,
+  detail: {
+    accent: "#5aa9e6",
+    role: "Artista 3D de entornos",
+    year: "2025",       
+    duration: "4 meses",
+    links: {
+      github:"https://github.com/XxCamilo14xX/Cadence-of-shadows"}, 
+    stack: ["Unreal Engine 5.3", "Blender", "LibreSprite"],
+    stackGroups: [
+      { label: "Motor", items: ["Unreal Engine 5.3"] },
+      { label: "Modelado y texturas 3D", items: ["Blender"] },
+      { label: "Pixel art y animación (equipo)", items: ["LibreSprite"] },
+      { label: "Plataforma", items: ["PC"] },
+    ],
+    screens: [
+      { label: "Vista del juego", image: "/projects/cadence/home.png" },
+      { label: "Edificios y casas", image: "/projects/cadence/edificios.png" },
+      { label: "Parque y canchas", image: "/projects/cadence/parque.png" },
+      { label: "Mobiliario urbano", image: "/projects/cadence/mobiliario.png" },
+    ],
+    story: {
+      title: "El juego",
+      text: "Un thriller psicológico y de acción 2.5D ambientado en la Colombia de los años 70, donde cada pista recopilada es una nota en la partitura de un crimen no resuelto.",
+      moments: [
+        { title: "Bogotá en los 70", text: "Una ciudad de bruma y calles marcadas por la violencia." },
+        { title: "Jazz disonante", text: "Los acordes disonantes del jazz marcan el tono de la historia." },
+        { title: "Pistas como notas", text: "Cada pista recopilada suma a la partitura de un crimen sin resolver." },
+      ],
+    },
+    featuresTitle: "Mi contribución",
+    features: [
+      { title: "Edificios y casas", text: "Modelado 3D de las construcciones que conforman la ciudad." },
+      { title: "Parques y canchas", text: "Parques y canchas de baloncesto y fútbol del entorno urbano." },
+      { title: "Mobiliario urbano", text: "Semáforos, basureros, bancas y otros elementos de la calle." },
+      { title: "Texturizado", text: "Texturas de algunos de los modelos, en Blender." },
+      { title: "En equipo", text: "Proyecto desarrollado junto a cuatro compañeros." },
     ],
   },
 },

@@ -57,7 +57,23 @@ export default function ProjectMockup({ project }: { project: Project }) {
     );
   }
 
-  /* ---------- Web: laptop + celular ---------- */
+  /* ---------- PC / videojuego: solo laptop, más grande y centrada ---------- */
+  if (project.device === "desktop") {
+    return (
+      <div className="@container relative aspect-[16/10] w-full drop-shadow-[0_20px_25px_rgba(0,0,0,0.5)]">
+        <div
+          className="absolute left-[5cqw] top-[2cqw] h-[54cqw] w-[90cqw] overflow-hidden rounded-[2cqw] border-[1cqw] border-[#14101c]"
+          style={{ background: bg }}
+        >
+          {shot(image)}
+          {gloss}
+        </div>
+        <div className="absolute left-[1cqw] top-[55.5cqw] h-[3.5cqw] w-[98cqw] rounded-b-[2cqw] rounded-t-[0.5cqw] bg-gradient-to-b from-[#cfc6dc] to-[#7d7390]" />
+      </div>
+    );
+  }
+
+  /* ---------- Web: laptop + celular (Por defecto) ---------- */
   return (
     <div className="@container relative aspect-[16/10] w-full drop-shadow-[0_20px_25px_rgba(0,0,0,0.5)]">
       <div
